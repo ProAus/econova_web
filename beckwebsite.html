@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herbal Medicine Prescriber</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <style>
+        .navbar a,
+        a {
+            font-size: 18px;
+            color: #ededed;
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 35px;
+            transition: 3px;
+            padding: 3px;
+            margin-right: 20px;
+        }
+        
+        .navbar a:hover,
+        .navbar a.active {
+            color: #00abf0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'poppins', sans-serif;
+        }
+        
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 10px;
+            background: rgb(27, 228, 127);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        .call-ambulance:hover {
+            background-color: white;
+            transform: translateY(-10px);
+            transform: translateX(10px);
+            border-style: solid;
+            border-color: rgb(44, 202, 44);
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 80px 20px 20px;
+        }
+        
+        section {
+            margin-bottom: 20px;
+            background-color: #f7f7f7;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: solid;
+            border-radius: 5px;
+            border-color: #4CAF50;
+            cursor: pointer;
+            transition: transform 0.3s ease 0.3s;
+        }
+        
+        button:hover {
+            background-color: white;
+            transform: translateY(-10px);
+            background-color: var(--clr-accent);
+            color: var(--clr-light);
+        }
+        
+        #prescription-result,
+        #bmi-result,
+        #appointment-result {
+            font-weight: bold;
+            color: #666;
+        }
+        
+        bs {
+            color: rgb(22, 255, 1);
+        }
+    </style>
+
+    <header class="header">
+        <a href="#" class="logo" id="logo">Eco<bs>Nova</bs></a>
+        <nav class="navbar">
+
+            <a href="#" class="active" onclick="" id="home">Home</a>
+            <a href="#" class="appoint" id="appoint">Appointment</a>
+            <a href="#" id="bmi">BMI</a>
+            <a href="#" id="emergency">Emergency</a>
+        </nav>
+    </header>
+    <main>
+        <section id="symptom-section">
+            <h2>Enter Symptoms:</h2>
+            <form id="symptom-form">
+
+                <label for="symptom-input">Symptom 1:</label>
+                <input type="text" id="symptom-input" placeholder="Symptom 1">
+                <label for="symptom-input-2">Symptom 2 (optional):</label>
+                <input type="text" id="symptom-input-2" placeholder="Symptom 2">
+
+                <label for="outputmed">Your Medicine:</label>
+                <input type="text" id="outputmed" placeholder="Medicine">
+                <button id="getmed" onclick="medicine()">Get Prescription</button>
+            </form>
+            <div id="prescription-result"></div>
+        </section>
+        <section id="bmi-section" style="display: none;">
+
+            <h2>Calculate BMI:</h2>
+            <form id="bmi-form">
+                <label for="weight-input">Weight (kg):</label>
+                <input type="text" id="weight-input" placeholder="Weight">
+                <label for="height-input">Height (m):</label>
+                <input type="text" id="height-input" placeholder="Height">
+                <label for="bmiout">BMI:</label>
+                <input type="text" id="bmiout" placeholder="BMI">
+                <button id="calculate-bmi" onclick="bmiresults()">Calculate BMI</button>
+            </form>
+            <div id="bmi-result"></div>
+        </section>
+        <section id="appointment-section" style="display: none;">
+            <h2>Book an Appointment</h2>
+            <form id="appointment-form" class="app-form">
+
+                <label for="name-input">Name:</label>
+                <input type="text" id="name-input" name="name" required>
+                <label for="date-preferred">Date Preferred:</label>
+                <input type="date" id="date-preferred" name="date" required>
+                <label for="doctor-select">Choose a Doctor:</label>
+
+                <select id="doctor-select" name="doctor" placeholder="Doctors">
+                    <option value="Dr. Smith">Dr.Smith</option>
+                    <option value="Dr. Ben">Dr.Ben</option>
+                    <option value="Dr. Moyo">Dr.Moyo</option>
+                    </select>
+                <button id="book-appointment" onclick="book()">Book Appointment</button>
+            </form>
+            <div id="appointment-result"></div>
+
+        </section>
+
+
+        <section id="contact-section" style="display: none;">
+            <h2>Contact Information</h2>
+            <form id="contact-form">
+                <ul>
+                    <li>Dr. Smith: 123-456-789</li>
+                    <li>Dr. Ben: 144-346-123</li>
+                    <li>Dr. Moyo: 156-678-6777</li>
+                </ul>
+                <h2>Emergency</h2>
+                <button id="call-ambulance" class="call-ambulance">Call Ambulance</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        const herbalMedicines = [{
+            id: 1,
+            name: "Ginger",
+            symptoms: ["Nausea", "Headache"]
+
+        }, {
+            id: 2,
+            name: "Tumeric",
+            symptoms: ["Inflammation", "Pain"]
+        }, {
+            id: 3,
+            name: "Dandelion root and rhubarb",
+            symptoms: ["Constipation", "Pain"]
+        }, {
+            id: 4,
+            name: "Aloe vera",
+            symptoms: ["Burns", "Wounds"]
+        }, {
+            id: 5,
+            name: "Ginger oil",
+            symptoms: ["Tooth", "Pain"]
+        }]
+        document.querySelector("form").addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                var s1 = document.getElementById("symptom-input").value;
+                var s2 = document.getElementById("symptom-input-2").value;
+                if (s1 === 'Constipation') {
+                    med = document.getElementById("outputmed").value = "Dandelion root and rhubarb";
+                }
+                if (s1 === 'Tooth') {
+                    med = document.getElementById("outputmed").value = "Ginger oil";
+                }
+                if (s1 === 'Burns' || s2 === 'Wounds') {
+                    med = document.getElementById("outputmed").value = "Aloe vera";
+                }
+                if (s1 === 'Inflammation') {
+                    med = document.getElementById("outputmed").value = "Tumeric";
+                }
+
+            }),
+
+            document.getElementById("calculate-bmi").addEventListener("click",
+                function(event) {
+                    event.preventDefault();
+
+                    var weight = document.getElementById("weight-input").value;
+                    var height = document.getElementById("height-input").value;
+                    squareh = height * height;
+
+                    result = document.getElementById("bmiout").value = weight / squareh;
+                    if (result < 18.5) {
+                        alert("Underweight")
+                    }
+                })
+        document.getElementById("book-appointment").addEventListener("click",
+            function(event) {
+                event.preventDefault();
+
+                var patient = document.getElementById("name-input").value;
+                var date = document.getElementById("date-preferred").value;
+                var doc = document.getElementById("doctor-select").value;
+
+
+                alert("Your appointment patient " + patient + " with " + doc + " was successful.The date for your appointment is " + date)
+
+            })
+        document.getElementById("call-ambulance").addEventListener("click",
+            function(event) {
+                event.preventDefault();
+                prompt("What's your emergency and adress")
+            })
+        document.getElementById("appoint").addEventListener("click",
+            function(event) {
+                event.preventDefault();
+                document.getElementById('appointment-section').style.display = 'block';
+                document.getElementById('symptom-section').style.display = 'none';
+                document.getElementById('bmi-section').style.display = 'none';
+                document.getElementById('contact-section').style.display = 'none';
+            })
+        document.getElementById("bmi").addEventListener("click",
+            function(event) {
+                event.preventDefault();
+                document.getElementById('bmi-section').style.display = 'block';
+                document.getElementById('symptom-section').style.display = 'none';
+                document.getElementById('appointment-section').style.display = 'none';
+                document.getElementById('contact-section').style.display = 'none';
+            })
+        document.getElementById("emergency").addEventListener("click",
+            function(event) {
+                event.preventDefault();
+                document.getElementById('contact-section').style.display = 'block';
+                document.getElementById('symptom-section').style.display = 'none';
+                document.getElementById('bmi-section').style.display = 'none';
+                document.getElementById('appointment-section').style.display = 'none';
+            })
+        document.getElementById("home").addEventListener("click",
+            function(event) {
+                event.preventDefault();
+                document.getElementById('symptom-section').style.display = 'block';
+                document.getElementById('contact-section').style.display = 'none';
+                document.getElementById('bmi-section').style.display = 'none';
+                document.getElementById('appointment-section').style.display = 'none';
+
+            })
+    </script>
+    </div>
+</body>
+
+</html>
